@@ -148,7 +148,7 @@ public class Project {
                         System.out.println("3. Big Car");
                         System.out.print("Choose car type: ");
                         int type = Integer.parseInt(in.nextLine());
-
+                    
                         switch (type) {
                             case 1:
                                 System.out.println("List Small Car:");
@@ -184,10 +184,10 @@ public class Project {
                                 System.err.println("Invalid type!\n");
                                 break;
                         }
-
+                    
                         System.out.print("choose car: ");
                         String chosenCar = in.nextLine();
-
+                    
                         Vehicle chosenVehicle = null;
                         for (Vehicle vehicle : vehicles) {
                             if (vehicle.getName().equalsIgnoreCase(chosenCar)) {
@@ -195,9 +195,10 @@ public class Project {
                                 break;
                             }
                         }
+                    
                         if (chosenVehicle != null) {
                             int capacity = 0;
-
+                    
                             if (chosenVehicle instanceof SmallCar) {
                                 capacity = ((SmallCar) chosenVehicle).getCapacity();
                             } else if (chosenVehicle instanceof MediumCar) {
@@ -205,27 +206,33 @@ public class Project {
                             } else if (chosenVehicle instanceof BigCar) {
                                 capacity = ((BigCar) chosenVehicle).getCapacity();
                             }
-
+                    
                             System.out.print("enter number of passengers: ");
                             int numPassengers = Integer.parseInt(in.nextLine());
                             System.out.print("enter destination: ");
                             String destination = in.nextLine();
-                            System.out.print("Enter rental date: ");
+                            System.out.print("Enter rental date (YYYY-MM-DD): ");
                             String startDateString = in.nextLine();
                             LocalDate startDate = LocalDate.parse(startDateString);
                             System.out.print("Enter rental duration (in days): ");
                             long duration = Integer.parseInt(in.nextLine());
                             LocalDate endDate = startDate.plusDays(duration);
-
+                    
+                            // Generate reservation number automatically
+                            int reservationNumber = 0; // Temporary value
                             Reservation newReservation = new Reservation(capacity, numPassengers, startDate, endDate,
-                                    chosenCar, destination, LocalDate.now());
+                            chosenCar, destination, LocalDate.now());
+                        
+                    
                             newReservation.addToTemporaryReservationList(chosenVehicle);
-                            reservations.put(username, newReservation);
-                            System.out.println("Reservation made successfully for " + username + "\n");
-                            accounts.get(username).addToBookingHistory(newReservation);
+                            reservations.put(login.get(0), newReservation);
+                            System.out.println("Reservation made successfully for " + login.get(0) + "\n");
+                            accounts.get(login.get(0)).addToBookingHistory(newReservation);
+                        } else {
+                            System.out.println("Invalid car choice.\n");
                         }
-
-                    } else if (command.startsWith("check bill")) {
+                    }
+                     else if (command.startsWith("check bill")) {
                         if (reservations.containsKey(username)) {
                             System.out.println("-------- Reservation Details --------");
                             System.out.printf("| %-20s | %-15s |%n", "Username:", username);
@@ -235,6 +242,8 @@ public class Project {
                                     accounts.get(username).getTelpNumber());
                             System.out.printf("| %-20s | %-15s |%n", "Gender:", accounts.get(username).getGender());
                             System.out.println("-------------------------------------");
+                            System.out.printf("| %-20s | %-15s |%n", "Reservation Number:",
+                            reservations.get(username).getReservationNumber());
                             System.out.printf("| %-20s | %-15s |%n", "Vehicle:",
                                     reservations.get(username).getChosenCar());
                             System.out.printf("| %-20s | %-15s |%n", "Destination:",
@@ -243,7 +252,7 @@ public class Project {
                                     reservations.get(username).getRentalStartDate());
                             System.out.printf("| %-20s | %-15s |%n", "End Date:",
                                     reservations.get(username).getRentalEndDate());
-                            System.out.printf("| %-20s | %-15s |%n", "Number of Passengers:",
+                            System.out.printf("| %-20s | %-15s |%n", "Passengers:",
                                     reservations.get(username).getNumberPassengers());
                             System.out.println("-------------------------------------");
 

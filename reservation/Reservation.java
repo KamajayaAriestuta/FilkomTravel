@@ -31,17 +31,22 @@ import com.travel.model.vehicle.Vehicle;
 public class Reservation {
     public int chooseVehicleCapacity;
     public int numberPassengers;
+    private static int reservationCounter = 1000;
+    private int reservationNumber;
     public LocalDate rentalStartDate;
     public LocalDate rentalEndDate;
+    // public LocalDate checkoutDate;
     public String chosenCar;
     public String destination;
     public ArrayList<Vehicle> temporaryReservationList;
     private LocalDate reservationDate;
 
     public Reservation(int chooseVehicleCapacity, int numberPassengers, LocalDate rentalStartDate,
-            LocalDate rentalEndDate, String chosenCar, String destination, LocalDate reservationDate) {
+        LocalDate rentalEndDate, String chosenCar, String destination, LocalDate reservationDate)
+    {
         this.chooseVehicleCapacity = chooseVehicleCapacity;
         this.numberPassengers = numberPassengers;
+        this.reservationNumber = generateReservationNumber();
         this.rentalStartDate = rentalStartDate;
         this.rentalEndDate = rentalEndDate;
         this.chosenCar = chosenCar;
@@ -129,4 +134,23 @@ public class Reservation {
     public int getNumberPassengers() {
         return numberPassengers;
     }
+    // public LocalDate getCheckoutDate() {
+    //     return checkoutDate;
+    // }
+
+    // public void setCheckoutDate(LocalDate checkoutDate) {
+    //     this.checkoutDate = checkoutDate;
+    // }
+
+    private static int generateReservationNumber() {
+        return ++reservationCounter;
+    }
+
+    public int getReservationNumber() {
+        return reservationNumber;
+    }
+
+    // public void setReservationNumber(int reservationNumber) {
+    //     this.reservationNumber = reservationNumber;
+    // }
 }

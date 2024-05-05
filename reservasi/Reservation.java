@@ -1,13 +1,21 @@
-package reservation;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Project.reservasi;
+
+/**
+ *
+ * @author imadekamajaya
+ */
+import Project.account.Pelanggan;
+import Project.car.BigCar;
+import Project.car.MediumCar;
+import Project.car.SmallCar;
+import Project.car.Vehicle;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-
-import com.travel.model.account.Profile;
-import com.travel.model.vehicle.BigCar;
-import com.travel.model.vehicle.MediumCar;
-import com.travel.model.vehicle.SmallCar;
-import com.travel.model.vehicle.Vehicle;
 
 
 /**
@@ -63,7 +71,7 @@ public class Reservation {
         this.reservationDate = reservationDate;
     }
 
-    public double calculateBill(Profile user) {
+    public double calculateBill(Pelanggan user) {
         double totalBill = 0.0;
 
         // Menghitung jumlah hari sewa secara manual

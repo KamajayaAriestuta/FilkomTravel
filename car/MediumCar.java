@@ -1,29 +1,41 @@
-package com.travel.model.vehicle;
-import java.util.*;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Project.car;
+
 /**
- * Kelas yang merepresentasikan sebuah mobil besar.
+ *
+ * @author imadekamajaya
+ */
+import java.util.ArrayList;
+
+/**
+ * Kelas yang merepresentasikan sebuah mobil sedang.
  * Kelas ini merupakan turunan dari kelas Vehicle.
  * Memiliki atribut tambahan seperti kapasitas dan harga sewa.
  * Metode yang dimilikinya adalah:
- * - getCapacity(): untuk mendapatkan kapasitas mobil besar.
- * - getRentPrice(): untuk mendapatkan harga sewa mobil besar.
+ * - getCapacity(): untuk mendapatkan kapasitas mobil sedang.
+ * - getRentPrice(): untuk mendapatkan harga sewa mobil sedang.
  * - displayHeader(): untuk menampilkan header saat menampilkan daftar mobil
- * besar.
- * - display(): untuk menampilkan detail mobil besar.
+ * sedang.
+ * - display(): untuk menampilkan detail mobil sedang.
  */
-public class BigCar extends Vehicle {
+public class MediumCar extends Vehicle {
     private int capacity;
     private double rentPrice;
-    private ArrayList<BigCar> bigCars = new ArrayList<>();
+    private ArrayList<MediumCar> mediumCars = new ArrayList<>();
 
-    public BigCar(String name, String brand, String type, String registrationNumber, int capacity, double rentPrice) {
+    public MediumCar(String name, String brand, String type, String registrationNumber, int capacity,
+                     double rentPrice) {
         super(name, brand, type, registrationNumber);
         this.capacity = capacity;
         this.rentPrice = rentPrice;
+
     }
 
-    public ArrayList<BigCar> getBigCars() {
-        return bigCars;
+    public ArrayList<MediumCar> getMediumCars() {
+        return mediumCars;
     }
 
     public int getCapacity() {

@@ -1,5 +1,15 @@
-package com.travel.model.vehicle;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Project.car;
+
+/**
+ *
+ * @author imadekamajaya
+ */
 import java.util.*;
+
 /**
  * Kelas yang merepresentasikan sebuah mobil kecil.
  * Kelas ini merupakan turunan dari kelas Vehicle.
@@ -11,6 +21,7 @@ import java.util.*;
  * kecil.
  * - display(): untuk menampilkan detail mobil kecil.
  */
+
 public class SmallCar extends Vehicle {
     private int capacity;
     private double rentPrice;

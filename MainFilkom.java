@@ -1,17 +1,39 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package Project;
+
+/**
+ *
+ * @author imadekamajaya
+ */
+import Project.account.Guest;
+import Project.account.Member;
+import Project.account.Pelanggan;
+import Project.car.BigCar;
+import Project.car.MediumCar;
+import Project.car.SmallCar;
+import Project.car.Vehicle;
+import Project.reservasi.Reservation;
+
+
 
 import java.time.LocalDate;
 import java.util.*;
+
 
 public class MainFilkom {
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
 
         Map<String, Pelanggan> accounts = new HashMap<>();
-        Map<String, Reservation> reservations = new LinkedHashMap<>();
+        // Map<String, Reservation> reservations = new LinkedHashMap<>();
+        Map<String, ArrayList<Reservation>> reservations = new HashMap<>();
         ArrayList<Vehicle> vehicles = new ArrayList<>();
         ArrayList<String> login = new ArrayList<>();
         boolean stop = true;
+        
 
         vehicles.add(new SmallCar("Ayla", "Daihatsu", "Hatchback", "N 1244 KK", 4, 350000));
         vehicles.add(new SmallCar("Agya", "Toyota", "Hatchback", "N 4231 EP", 4, 350000));
@@ -71,7 +93,7 @@ public class MainFilkom {
                             System.err.println("Gender not valid");
                             gender = "Not Found";
                         }
-                        Guest newGuest = new Guest(firstName, lastName, NIK, phoneNumber, gender, password);
+                        Project.account.Guest newGuest = new Project.account.Guest(firstName, lastName, NIK, phoneNumber, gender, password);
                         accounts.put(username, newGuest);
                         System.out.println("CREATE ACCOUNT SUCCESS, HELLO " + username + ", welcome to Travel FILKOM UB " + firstName + "\n");
                     }
@@ -93,15 +115,15 @@ public class MainFilkom {
                     } else {
                         Pelanggan pelanggan = accounts.get(username);
                         System.out.print("Enter new first name (leave blank to keep current): ");
-                        String newFirstName = in.nextLine().trim();
+                        String newFirstName = accounts.get(username).getFirstName();
                         if (!newFirstName.isEmpty()) {
-                            pelanggan.firstName = newFirstName;
+                            pelanggan.getFirstName();
                         }
 
                         System.out.print("Enter new last name (leave blank if no change): ");
                         String newLastName = in.nextLine().trim();
                         if (!newLastName.isEmpty()) {
-                            pelanggan.lastName = newLastName;
+                            pelanggan.getLastName();
                         }
 
                         System.out.print("Enter new phone number (leave blank if no change): ");
@@ -136,8 +158,8 @@ public class MainFilkom {
                         if (accounts.containsKey(username)) {
                             Pelanggan current = accounts.get(username);
                             if (current instanceof Guest) {
-                                Member newMember = new Member(current.firstName, current.lastName, current.getNIK(), current.getPhoneNumber(), current.getGender(), LocalDate.now(), current.getPassword());
-                                newMember.bookingHistory = new ArrayList<>(current.bookingHistory);
+                                Project.account.Member newMember = new Member(current.getFirstName(), current.getLastName(), current.getNIK(), current.getPhoneNumber(), current.getGender(), LocalDate.now(), current.getPassword());
+                                newMember.setBookingHistory(new ArrayList<>(current.getBookingHistory()));
                                 accounts.put(username, newMember);
                                 System.out.println("Upgrade successful: " + username + " is now a member.\n");
                             }else {
@@ -154,86 +176,106 @@ public class MainFilkom {
                         System.out.println("3. Big Car");
                         System.out.print("Choose car type: ");
                         int type = Integer.parseInt(in.nextLine());
-
-                        switch (type) {
-                            case 1:
-                                System.out.println("List Small Car:");
-                                SmallCar.displayHeader();
-                                for (Vehicle vehicle : vehicles) {
-                                    if (vehicle instanceof SmallCar) {
-                                        SmallCar display = (SmallCar) vehicle;
-                                        display.display();
+                    
+                        System.out.print("Enter the number of cars needed: ");
+                        int numCarsNeeded = Integer.parseInt(in.nextLine());
+                    
+                        // Buat daftar reservasi sementara untuk menyimpan semua mobil yang disewa
+                        ArrayList<Reservation> temporaryReservations = new ArrayList<>();
+                    
+                        for (int i = 0; i < numCarsNeeded; i++) {
+                            System.out.println("List Cars:");
+                            switch (type) {
+                                case 1:
+                                    System.out.println("List Small Car:");
+                                    SmallCar.displayHeader();
+                                    for (Vehicle vehicle : vehicles) {
+                                        if (vehicle instanceof SmallCar) {
+                                            SmallCar display = (SmallCar) vehicle;
+                                            display.display();
+                                        }
                                     }
-                                }
-                                break;
-                            case 2:
-                                System.out.println("List Medium Car:");
-                                MediumCar.displayHeader();
-                                for (Vehicle vehicle : vehicles) {
-                                    if (vehicle instanceof MediumCar) {
-                                        MediumCar display = (MediumCar) vehicle;
-                                        display.display();
+                                    break;
+                                case 2:
+                                    System.out.println("List Medium Car:");
+                                    MediumCar.displayHeader();
+                                    for (Vehicle vehicle : vehicles) {
+                                        if (vehicle instanceof MediumCar) {
+                                            MediumCar display = (MediumCar) vehicle;
+                                            display.display();
+                                        }
                                     }
-                                }
-                                break;
-                            case 3:
-                                System.out.println("List Big Car:");
-                                BigCar.displayHeader();
-                                for (Vehicle vehicle : vehicles) {
-                                    if (vehicle instanceof BigCar) {
-                                        BigCar display = (BigCar) vehicle;
-                                        display.display();
+                                    break;
+                                case 3:
+                                    System.out.println("List Big Car:");
+                                    BigCar.displayHeader();
+                                    for (Vehicle vehicle : vehicles) {
+                                        if (vehicle instanceof BigCar) {
+                                            BigCar display = (BigCar) vehicle;
+                                            display.display();
+                                        }
                                     }
+                                    break;
+                                default:
+                                    System.err.println("Invalid type!\n");
+                                    break;
+                            }
+                    
+                            System.out.print("choose car: ");
+                            String chosenCar = in.nextLine();
+                    
+                            Vehicle chosenVehicle = null;
+                            for (Vehicle vehicle : vehicles) {
+                                if (vehicle.getName().equalsIgnoreCase(chosenCar)) {
+                                    chosenVehicle = vehicle;
+                                    break;
                                 }
-                                break;
-                            default:
-                                System.err.println("Invalid type!\n");
-                                break;
-                        }
-
-                        System.out.print("choose car: ");
-                        String chosenCar = in.nextLine();
-
-                        Vehicle chosenVehicle = null;
-                        for (Vehicle vehicle : vehicles) {
-                            if (vehicle.getName().equalsIgnoreCase(chosenCar)) {
-                                chosenVehicle = vehicle;
-                                break;
+                            }
+                    
+                            if (chosenVehicle != null) {
+                                int capacity = 0;
+                    
+                                if (chosenVehicle instanceof SmallCar) {
+                                    capacity = ((SmallCar) chosenVehicle).getCapacity();
+                                } else if (chosenVehicle instanceof MediumCar) {
+                                    capacity = ((MediumCar) chosenVehicle).getCapacity();
+                                } else if (chosenVehicle instanceof BigCar) {
+                                    capacity = ((BigCar) chosenVehicle).getCapacity();
+                                }
+                    
+                                System.out.print("enter number of passengers: ");
+                                int numPassengers = Integer.parseInt(in.nextLine());
+                                System.out.print("enter destination: ");
+                                String destination = in.nextLine();
+                                System.out.print("Enter rental date (YYYY-MM-DD): ");
+                                String startDateString = in.nextLine();
+                                LocalDate startDate = LocalDate.parse(startDateString);
+                                System.out.print("Enter rental duration (in days): ");
+                                long duration = Integer.parseInt(in.nextLine());
+                                LocalDate endDate = startDate.plusDays(duration);
+                    
+                                // Generate reservation number automatically
+                                int reservationNumber = 0; // Temporary value
+                                Reservation newReservation = new Reservation(capacity, numPassengers, startDate, endDate,
+                                        chosenCar, destination, LocalDate.now());
+                    
+                                newReservation.addToTemporaryReservationList(chosenVehicle);
+                                // Tambahkan reservasi ke daftar reservasi sementara
+                                temporaryReservations.add(newReservation);
+                            } else {
+                                System.out.println("Invalid car choice.\n");
                             }
                         }
-
-                        if (chosenVehicle != null) {
-                            int capacity = 0;
-
-                            if (chosenVehicle instanceof SmallCar) {
-                                capacity = ((SmallCar) chosenVehicle).getCapacity();
-                            } else if (chosenVehicle instanceof MediumCar) {
-                                capacity = ((MediumCar) chosenVehicle).getCapacity();
-                            } else if (chosenVehicle instanceof BigCar) {
-                                capacity = ((BigCar) chosenVehicle).getCapacity();
-                            }
-
-                            System.out.print("enter number of passengers: ");
-                            int numPassengers = Integer.parseInt(in.nextLine());
-                            System.out.print("enter destination: ");
-                            String destination = in.nextLine();
-                            System.out.print("Enter rental date (YYYY-MM-DD): ");
-                            String startDateString = in.nextLine();
-                            LocalDate startDate = LocalDate.parse(startDateString);
-                            System.out.print("Enter rental duration (in days): ");
-                            long duration = Integer.parseInt(in.nextLine());
-                            LocalDate endDate = startDate.plusDays(duration);
-
-                            Reservation newReservation = new Reservation(capacity, numPassengers, startDate, endDate, chosenCar, destination, LocalDate.now());
-                            newReservation.addToTemporaryReservationList(chosenVehicle);
-
-                            accounts.get(username).addToBookingHistory(newReservation);
-                            reservations.put(username, newReservation);
-                            System.out.println("Reservation made successfully for " + username + "\n");
-                        } else {
-                            System.out.println("Invalid car choice.");
+                    
+                        // Tambahkan semua reservasi sementara ke daftar reservasi pengguna
+                        reservations.put(login.get(0), temporaryReservations);
+                        System.out.println("Reservation made successfully for " + login.get(0) + "\n");
+                    
+                        // Tambahkan semua reservasi sementara ke riwayat pemesanan pengguna
+                        for (Reservation reservation : temporaryReservations) {
+                            accounts.get(login.get(0)).addToBookingHistory(reservation);
                         }
-                    } else if (command.startsWith("check bill")) {
+                    }else if (command.startsWith("check bill")) {
                         if (reservations.containsKey(username)) {
                             System.out.println("-------- Reservation Details --------");
                             System.out.printf("| %-20s | %-15s |%n", "Username:", username);
@@ -243,25 +285,26 @@ public class MainFilkom {
                                     accounts.get(username).getPhoneNumber());
                             System.out.printf("| %-20s | %-15s |%n", "Gender:", accounts.get(username).getGender());
                             System.out.println("-------------------------------------");
-                            System.out.printf("| %-20s | %-15s |%n", "Reservation Number:",
-                                    reservations.get(username).getReservationNumber());
-                            System.out.printf("| %-20s | %-15s |%n", "Vehicle:",
-                                    reservations.get(username).getChosenCar());
-                            System.out.printf("| %-20s | %-15s |%n", "Destination:",
-                                    reservations.get(username).getDestination());
-                            System.out.printf("| %-20s | %-15s |%n", "Start Date:",
-                                    reservations.get(username).getRentalStartDate());
-                            System.out.printf("| %-20s | %-15s |%n", "End Date:",
-                                    reservations.get(username).getRentalEndDate());
-                            System.out.printf("| %-20s | %-15s |%n", "Passengers:",
-                                    reservations.get(username).getNumberPassengers());
-                            System.out.println("-------------------------------------");
-
-                            double totalBill = reservations.get(username).calculateBill(accounts.get(username));
-                            System.out.printf("| Total Bill: %-10.2f |%n", totalBill);
-                            System.out.println("----------------------");
+                    
+                            // Ambil semua reservasi untuk pengguna tertentu
+                            ArrayList<Reservation> userReservations = reservations.get(username);
+                    
+                            // Iterasi melalui semua reservasi pengguna
+                            for (Reservation reservation : userReservations) {
+                                System.out.printf("| %-20s | %-15s |%n", "Reservation Number:", reservation.getReservationNumber());
+                                System.out.printf("| %-20s | %-15s |%n", "Vehicle:", reservation.getChosenCar());
+                                System.out.printf("| %-20s | %-15s |%n", "Destination:", reservation.getDestination());
+                                System.out.printf("| %-20s | %-15s |%n", "Start Date:", reservation.getRentalStartDate());
+                                System.out.printf("| %-20s | %-15s |%n", "End Date:", reservation.getRentalEndDate());
+                                System.out.printf("| %-20s | %-15s |%n", "Passengers:", reservation.getNumberPassengers());
+                                System.out.println("-------------------------------------");
+                    
+                                double totalBill = reservation.calculateBill(accounts.get(username));
+                                System.out.printf("| Total Bill: %-10.2f |%n", totalBill);
+                                System.out.println("----------------------");
+                            }
                         } else {
-                            System.out.println("Reservation for " + username + "Not Found!");
+                            System.out.println("Reservation for " + username + " Not Found!");
                         }
                     } else if (command.startsWith("booking history")) {
                         username = login.get(0);

@@ -1,4 +1,14 @@
-package com.travel.model.account;
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Project.account;
+
+/**
+ *
+ * @author imadekamajaya
+ */
+import Project.reservasi.Reservation;
 import java.util.ArrayList;
 
 public abstract class Pelanggan {
@@ -67,5 +77,21 @@ public abstract class Pelanggan {
     }
     public boolean isMember(){
         return false;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public ArrayList<Reservation> getBookingHistory() {
+        return bookingHistory;
+    }
+
+    public void setBookingHistory(ArrayList<Reservation> bookingHistory) {
+        this.bookingHistory = bookingHistory;
     }
 }

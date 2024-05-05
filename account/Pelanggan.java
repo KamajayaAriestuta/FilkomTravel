@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-abstract class Pelanggan {
+public abstract class Pelanggan {
     protected String firstName;
     protected String lastName;
     protected String NIK;

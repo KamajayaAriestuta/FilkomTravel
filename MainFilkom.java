@@ -2,7 +2,6 @@ package Project;
 
 import java.time.LocalDate;
 import java.util.*;
-ss
 
 public class MainFilkom {
     public static void main(String[] args) {

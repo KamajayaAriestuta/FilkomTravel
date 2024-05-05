@@ -1,4 +1,4 @@
-class Guest extends Pelanggan {
+public class Guest extends Pelanggan {
     public Guest(String firstName, String lastName, String NIK, String phoneNumber, String gender, String password) {
         super(firstName, lastName, NIK, phoneNumber, gender, password);
     }

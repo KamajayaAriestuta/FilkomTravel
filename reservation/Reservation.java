@@ -1,4 +1,4 @@
-package com.travel.model.reservation;
+package reservation;
 
 import java.time.LocalDate;
 import java.util.ArrayList;

@@ -1,3 +1,4 @@
+package com.travel.model.account;
 import java.util.ArrayList;
 
 public abstract class Pelanggan {
